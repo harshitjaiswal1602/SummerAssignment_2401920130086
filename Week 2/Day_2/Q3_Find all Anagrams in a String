@@ -1,0 +1,40 @@
+class Solution {
+public:
+    std::vector<int> findAnagrams(std::string s, std::string p) {
+        std::vector<int> result;
+        int sLen = s.length();
+        int pLen = p.length();
+        
+        if (sLen < pLen) return result;
+        
+        int pCount[26] = {0};
+        int sCount[26] = {0};
+        
+        for (int i = 0; i < pLen; ++i) {
+            pCount[p[i] - 'a']++;
+            sCount[s[i] - 'a']++;
+        }
+        
+        auto matches = [](int c1[26], int c2[26]) {
+            for (int i = 0; i < 26; ++i) {
+                if (c1[i] != c2[i]) return false;
+            }
+            return true;
+        };
+        
+        if (matches(pCount, sCount)) {
+            result.push_back(0);
+        }
+        
+        for (int i = pLen; i < sLen; ++i) {
+            sCount[s[i] - 'a']++;
+            sCount[s[i - pLen] - 'a']--;
+            
+            if (matches(pCount, sCount)) {
+                result.push_back(i - pLen + 1);
+            }
+        }
+        
+        return result;
+    }
+};
