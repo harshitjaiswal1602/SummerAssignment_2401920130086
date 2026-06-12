@@ -1,0 +1,71 @@
+#include <iostream>
+
+// Placing the interface inside the music namespace
+namespace music {
+    class Playable {
+    public:
+        virtual void play() = 0;       // Pure virtual function
+        virtual ~Playable() = default; // Virtual destructor for safe polymorphism
+    };
+}
+
+// Placing Veena inside the music::string namespace
+namespace music {
+    namespace string {
+        class Veena : public music::Playable {
+        public:
+            void play() override {
+                std::cout << "Playing the Veena: Producing beautiful string melodies.\n";
+            }
+        };
+    }
+}
+
+// Placing Saxophone inside the music::wind namespace
+namespace music {
+    namespace wind {
+        class Saxophone : public music::Playable {
+        public:
+            void play() override {
+                std::cout << "Playing the Saxophone: Producing smooth wind jazz notes.\n";
+            }
+        };
+    }
+}
+
+// Placing the Test execution logic inside the live namespace
+namespace live {
+    void runTest() {
+        // a. Create an instance of Veena and call play() method
+        std::cout << "--- Part A ---\n";
+        music::string::Veena veenaObj;
+        veenaObj.play();
+        
+        std::cout << "\n";
+
+        // b. Create an instance of Saxophone and call play() method
+        std::cout << "--- Part B ---\n";
+        music::wind::Saxophone saxObj;
+        saxObj.play();
+        
+        std::cout << "\n";
+
+        // c. Place the above instances in a variable of type Playable and then call play()
+        std::cout << "--- Part C (Polymorphism) ---\n";
+        music::Playable* playableVar;
+
+        // Pointing to Veena instance using its memory address
+        playableVar = &veenaObj;
+        playableVar->play();
+
+        // Pointing to Saxophone instance using its memory address
+        playableVar = &saxObj;
+        playableVar->play();
+    }
+}
+
+int main() {
+    // Execute the requested test routine
+    live::runTest();
+    return 0;
+}
