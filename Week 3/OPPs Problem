@@ -1,0 +1,71 @@
+#include <iostream>
+#include <string>
+#include <memory>
+#include <random>
+
+class Compartment {
+public:
+    virtual std::string notice() = 0;
+    virtual ~Compartment() = default;
+};
+
+class FirstClass : public Compartment {
+public:
+    std::string notice() override {
+        return "First Class: High comfort zone. Please maintain silence and structural decorum.";
+    }
+};
+
+class Ladies : public Compartment {
+public:
+    std::string notice() override {
+        return "Ladies Compartment: Reserved exclusively for female passengers. Trespassers will be fined.";
+    }
+};
+
+class General : public Compartment {
+public:
+    std::string notice() override {
+        return "General Compartment: Open seating configuration. Please adjust with fellow passengers.";
+    }
+};
+
+class Luggage : public Compartment {
+public:
+    std::string notice() override {
+        return "Luggage Compartment: Intended only for heavy luggage goods. Passenger seating prohibited.";
+    }
+};
+
+int main() {
+    std::unique_ptr<Compartment> trainCoaches[10];
+
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<int> distrib(1, 4);
+
+    for (int i = 0; i < 10; ++i) {
+        int randomType = distrib(gen);
+
+        switch (randomType) {
+            case 1:
+                trainCoaches[i] = std::make_unique<FirstClass>();
+                break;
+            case 2:
+                trainCoaches[i] = std::make_unique<Ladies>();
+                break;
+            case 3:
+                trainCoaches[i] = std::make_unique<General>();
+                break;
+            case 4:
+                trainCoaches[i] = std::make_unique<Luggage>();
+                break;
+        }
+    }
+
+    for (int i = 0; i < 10; ++i) {
+        std::cout << "Coach Position [" << (i + 1) << "] -> " << trainCoaches[i]->notice() << "\n";
+    }
+
+    return 0;
+}
